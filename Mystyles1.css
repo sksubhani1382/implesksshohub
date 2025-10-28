@@ -392,7 +392,7 @@ nav ul li a {
 
 
 
-/* Make about page everything responsive and clean */
+/* Make contact page everything responsive and clean */
 body {
   margin: 0;
   padding: 0;
@@ -401,14 +401,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Header logo + title */
-.logo {
-  width: 60px;
-  height: 60px;
-  border: 3px solid red;
-  vertical-align: middle;
-  border-radius: 10px;
-}
 
 /* Title center */
 h1 {
@@ -502,6 +494,7 @@ footer {
     font-size: 14px;
   }
 }
+
 
 
 
