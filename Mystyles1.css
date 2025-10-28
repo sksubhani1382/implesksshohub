@@ -392,5 +392,116 @@ nav ul li a {
 
 
 
+/* Make about page everything responsive and clean */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: rgb(164, 171, 225);
+  font-family: "Georgia", serif;
+  overflow-x: hidden;
+}
+
+/* Header logo + title */
+.logo {
+  width: 60px;
+  height: 60px;
+  border: 3px solid red;
+  vertical-align: middle;
+  border-radius: 10px;
+}
+
+/* Title center */
+h1 {
+  font-size: 28px;
+  text-align: center;
+  margin: 10px 0;
+}
+
+/* Navigation bar */
+nav {
+  background-color: #e48ad5;
+  padding: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+nav ul {
+  list-style-type: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  margin: 5px 10px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+nav ul li a:hover {
+  color: white;
+}
+
+/* Image responsiveness */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: auto;
+}
+
+/* Table responsiveness */
+.table {
+  width: 95%;
+  margin: 20px auto;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  text-align: center;
+  border: 1px solid black;
+}
+
+/* Footer */
+footer {
+  background-color: #e48ad5;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+/* Make everything fit mobile screens */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 22px;
+  }
+
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav ul li {
+    margin: 5px 0;
+  }
+
+  img.logo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .table {
+    font-size: 14px;
+  }
+}
+
 
 
