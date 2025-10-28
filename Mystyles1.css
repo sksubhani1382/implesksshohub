@@ -365,7 +365,7 @@ body {
 
 /* 📞 Contact Page Image Fit */
 .contact-image {
-  width: 100%;
+  width: 80%;
   height: auto;
   max-height: 80vh;
   object-fit: cover;
@@ -381,11 +381,12 @@ body {
   }
 
   table {
-    width: 90%;
+    width: 80%;
     margin: 0 auto; /* center table */
     font-size: 0.9em; /* slightly smaller text */
   }
 }
+
 
 
 
