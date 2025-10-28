@@ -316,6 +316,43 @@ body {
 }
 
 
+/* 🛒 Responsive Hero Image for Cart Page */
+.carthero-image {
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  border: 10px solid black;
+}
+
+/* 📱 Mobile View Optimization */
+@media (max-width: 768px) {
+  .carthero-image {
+    max-height: 300px; /* smaller image for mobile */
+  }
+
+  nav ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+  }
+
+  nav ul li {
+    display: block;
+    margin: 5px 0;
+  }
+
+  .container {
+    width: 95%;
+    padding: 10px;
+  }
+
+  h1, h2, h3, h4 {
+    text-ali
+
 
 
 
