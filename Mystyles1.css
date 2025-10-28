@@ -297,7 +297,7 @@ body {
 
 
 
-/* ✅ Responsive Hero Image */
+/*  Responsive Hero Image */
 .hero-image {
   width: 100%;
   height: auto;
@@ -308,12 +308,30 @@ body {
   border: 10px solid black;
 }
 
-/* 📱 Mobile View Optimization */
+/* Mobile View Optimization */
 @media (max-width: 768px) {
   .hero-image {
     max-height: 300px; /* reduce height for mobile */
   }
 }
+
+
+/* Fit Cart Page Image to Screen (Responsive) */
+.carthero-image {
+  width: 100%;
+  height: auto;
+  max-height: 80vh;   /* prevents it from being too tall */
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .carthero-image {
+    max-height: 300px; /* smaller height on phones */
+  }
+}
+
 
 
 
