@@ -51,82 +51,84 @@
     </footer>
 
     <script>
-/* ===== shared cart helpers ===== */
+/* Helper: get cart from localStorage or create new */
 function getCart() {
-  // return cart object or initialize if missing
   return JSON.parse(localStorage.getItem('cart')) || { items: [], total: 0 };
 }
 
+/* Helper: save cart back to localStorage */
 function saveCart(cart) {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-function recalcTotal(cart) {
-  cart.total = cart.items.reduce((s, it) => s + Number(it.price || 0), 0);
-  return cart;
-}
-
-/* Add item to cart — safe: reads existing cart, pushes, saves */
+/* Add item to cart (call this from product pages/buttons) */
 function addToCart(name, price) {
   const cart = getCart();
-  const numericPrice = Number(price) || 0;
-  cart.items.push({ name: String(name), price: numericPrice });
-  recalcTotal(cart);
-  saveCart(cart);
 
-  // Optional: if on cart page, refresh visible cart
+  // ensure price is a number
+  const numericPrice = Number(price) || 0;
+
+  // push new item and update total
+  cart.items.push({ name: name, price: numericPrice });
+  cart.total = cart.items.reduce((sum, it) => sum + Number(it.price || 0), 0);
+
+  saveCart(cart);
+  // If user is currently on the Cart page, refresh view
   if (typeof loadCart === 'function') loadCart();
 }
 
-/* Remove item by index and refresh */
+/* Load and render the cart */
+function loadCart() {
+  const cart = getCart();
+  const cartCountEl = document.getElementById('cart-count');
+  const cartTotalEl = document.getElementById('cart-total');
+  const cartItemsDiv = document.getElementById('cart-items');
+
+  cartItemsDiv.innerHTML = ''; // clear
+
+  if (!cart.items || cart.items.length === 0) {
+    cartItemsDiv.innerHTML = "<p>Your cart is empty.</p>";
+    if (cartCountEl) cartCountEl.innerText = 0;
+    if (cartTotalEl) cartTotalEl.innerText = 0;
+    return;
+  }
+
+  cart.items.forEach((item, index) => {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'col-md-4';
+    itemDiv.innerHTML = `
+      <h4>${escapeHtml(item.name)}</h4>
+      <p>Price: ${Number(item.price).toLocaleString()} Rupees</p>
+      <button class="remove-btn" data-index="${index}">Remove</button>
+    `;
+    cartItemsDiv.appendChild(itemDiv);
+  });
+
+  if (cartCountEl) cartCountEl.innerText = cart.items.length;
+  if (cartTotalEl) cartTotalEl.innerText = Number(cart.total).toLocaleString();
+}
+
+/* Remove an item by index */
 function removeItem(index) {
   const cart = getCart();
   if (index < 0 || index >= cart.items.length) return;
   cart.items.splice(index, 1);
-  recalcTotal(cart);
+  cart.total = cart.items.reduce((sum, it) => sum + Number(it.price || 0), 0);
   saveCart(cart);
-  if (typeof loadCart === 'function') loadCart();
+  loadCart();
 }
 
-/* Render cart on Cart page (expects elements with IDs cart-items, cart-count, cart-total) */
-function loadCart() {
-  const cart = getCart();
-  const cartItemsDiv = document.getElementById('cart-items');
-  const cartCount = document.getElementById('cart-count');
-  const cartTotal = document.getElementById('cart-total');
-
-  if (!cartItemsDiv) return; // not on cart page
-
-  cartItemsDiv.innerHTML = '';
-  if (!cart.items || cart.items.length === 0) {
-    cartItemsDiv.innerHTML = '<p>Your cart is empty.</p>';
-    if (cartCount) cartCount.innerText = 0;
-    if (cartTotal) cartTotal.innerText = 0;
-    return;
-  }
-
-  cart.items.forEach((item, idx) => {
-    const box = document.createElement('div');
-    box.className = 'cart-item-box';
-    box.innerHTML = `
-      <h4>${escapeHtml(item.name)}</h4>
-      <p>Price: ${Number(item.price).toLocaleString()} Rupees</p>
-      <button class="remove-btn" data-index="${idx}">Remove</button>
-    `;
-    cartItemsDiv.appendChild(box);
-  });
-
-  if (cartCount) cartCount.innerText = cart.items.length;
-  if (cartTotal) cartTotal.innerText = Number(cart.total).toLocaleString();
+/* Utility: escape HTML to avoid injection when inserting names */
+function escapeHtml(unsafe) {
+  return String(unsafe)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
-/* safe html escape */
-function escapeHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-                  .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
-}
-
-/* delegate remove button clicks */
+/* Delegate remove button clicks (works for dynamically created buttons) */
 document.addEventListener('click', function(e) {
   if (e.target && e.target.matches('.remove-btn')) {
     const idx = Number(e.target.getAttribute('data-index'));
@@ -134,16 +136,15 @@ document.addEventListener('click', function(e) {
   }
 });
 
-/* init cart view when Cart page loads */
+/* Initialize cart view on page load */
 window.addEventListener('DOMContentLoaded', loadCart);
 </script>
-
-
 
 
 </body>
 
 </html>
+
 
 
 
