@@ -51,99 +51,56 @@
     </footer>
 
     <script>
-/* Helper: get cart from localStorage or create new */
-function getCart() {
-  return JSON.parse(localStorage.getItem('cart')) || { items: [], total: 0 };
-}
+  function loadCart() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || { items: [], total: 0 };
+    const cartCount = document.getElementById('cart-count');
+    const cartTotal = document.getElementById('cart-total');
+    const cartItemsDiv = document.getElementById('cart-items');
 
-/* Helper: save cart back to localStorage */
-function saveCart(cart) {
-  localStorage.setItem('cart', JSON.stringify(cart));
-}
+    // Clear any old content
+    cartItemsDiv.innerHTML = '';
 
-/* Add item to cart (call this from product pages/buttons) */
-function addToCart(name, price) {
-  const cart = getCart();
+    if (cart.items.length === 0) {
+      cartItemsDiv.innerHTML = "<p>Your cart is empty.</p>";
+      cartCount.innerText = 0;
+      cartTotal.innerText = 0;
+      return;
+    }
 
-  // ensure price is a number
-  const numericPrice = Number(price) || 0;
+    // Display items
+    cart.items.forEach((item, index) => {
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'col-md-4';
+      itemDiv.innerHTML = `
+        <h4>${item.name}</h4>
+        <p>Price: ${item.price} Rupees</p>
+        <button onclick="removeItem(${index})" style="background-color:red;color:white;border:none;padding:5px 10px;border-radius:5px;">Remove</button>
+      `;
+      cartItemsDiv.appendChild(itemDiv);
+    });
 
-  // push new item and update total
-  cart.items.push({ name: name, price: numericPrice });
-  cart.total = cart.items.reduce((sum, it) => sum + Number(it.price || 0), 0);
-
-  saveCart(cart);
-  // If user is currently on the Cart page, refresh view
-  if (typeof loadCart === 'function') loadCart();
-}
-
-/* Load and render the cart */
-function loadCart() {
-  const cart = getCart();
-  const cartCountEl = document.getElementById('cart-count');
-  const cartTotalEl = document.getElementById('cart-total');
-  const cartItemsDiv = document.getElementById('cart-items');
-
-  cartItemsDiv.innerHTML = ''; // clear
-
-  if (!cart.items || cart.items.length === 0) {
-    cartItemsDiv.innerHTML = "<p>Your cart is empty.</p>";
-    if (cartCountEl) cartCountEl.innerText = 0;
-    if (cartTotalEl) cartTotalEl.innerText = 0;
-    return;
+    // Update totals
+    cartCount.innerText = cart.items.length;
+    cartTotal.innerText = cart.total;
   }
 
-  cart.items.forEach((item, index) => {
-    const itemDiv = document.createElement('div');
-    itemDiv.className = 'col-md-4';
-    itemDiv.innerHTML = `
-      <h4>${escapeHtml(item.name)}</h4>
-      <p>Price: ${Number(item.price).toLocaleString()} Rupees</p>
-      <button class="remove-btn" data-index="${index}">Remove</button>
-    `;
-    cartItemsDiv.appendChild(itemDiv);
-  });
-
-  if (cartCountEl) cartCountEl.innerText = cart.items.length;
-  if (cartTotalEl) cartTotalEl.innerText = Number(cart.total).toLocaleString();
-}
-
-/* Remove an item by index */
-function removeItem(index) {
-  const cart = getCart();
-  if (index < 0 || index >= cart.items.length) return;
-  cart.items.splice(index, 1);
-  cart.total = cart.items.reduce((sum, it) => sum + Number(it.price || 0), 0);
-  saveCart(cart);
-  loadCart();
-}
-
-/* Utility: escape HTML to avoid injection when inserting names */
-function escapeHtml(unsafe) {
-  return String(unsafe)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-/* Delegate remove button clicks (works for dynamically created buttons) */
-document.addEventListener('click', function(e) {
-  if (e.target && e.target.matches('.remove-btn')) {
-    const idx = Number(e.target.getAttribute('data-index'));
-    removeItem(idx);
+  function removeItem(index) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || { items: [], total: 0 };
+    if (index >= 0 && index < cart.items.length) {
+      cart.total -= cart.items[index].price;
+      cart.items.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      loadCart(); // reload cart
+    }
   }
-});
 
-/* Initialize cart view on page load */
-window.addEventListener('DOMContentLoaded', loadCart);
+  window.onload = loadCart;
 </script>
-
 
 </body>
 
 </html>
+
 
 
 
