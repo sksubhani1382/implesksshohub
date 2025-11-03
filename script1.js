@@ -1,49 +1,54 @@
 // Load cart count on all pages
-window.onload = () => {
-    updateCartCount();
-    if (document.getElementById("cartItems")) {
-        displayCart();
-    }
-};
-
-// Add item to cart
-function addToCart(name, price) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.push({ name, price });
-    localStorage.setItem("cart", JSON.stringify(cart));
-    updateCartCount();
-    alert(name + " added to cart!");
-}
-
-// Update cart count in navbar
 function updateCartCount() {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    document.getElementById("cartCount").innerText = cart.length;
+    let cart = JSON.parse(localStorage.getItem('cart')) || { items: [], total: 0 };
+    const countSpan = document.getElementById("cart-count");
+    if (countSpan) countSpan.innerText = cart.items.length;
 }
 
-// Display cart items in cart.html
-function displayCart() {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    let container = document.getElementById("cartItems");
-    let total = 0;
-    container.innerHTML = "";
+// Load items on cart page
+function loadCartPage() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || { items: [], total: 0 };
 
-    cart.forEach((item, index) => {
-        total += item.price;
-        container.innerHTML += `
-            <p>${item.name} - ${item.price} Rupees
-            <button onclick="removeItem(${index})">Remove</button></p>
+    const itemsDiv = document.getElementById("cart-items");
+    const totalSpan = document.getElementById("cart-total");
+
+    if (!itemsDiv || !totalSpan) return; // Not cart page
+
+    itemsDiv.innerHTML = "";
+
+    if (cart.items.length === 0) {
+        itemsDiv.innerHTML = "<p>Your cart is empty.</p>";
+        totalSpan.innerText = "0";
+        updateCartCount();
+        return;
+    }
+
+    cart.items.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "col-md-4";
+        div.innerHTML = `
+            <h4>${item.name}</h4>
+            <p>Price: ${item.price} Rupees</p>
+            <button onclick="removeItem(${index})" class="btn btn-danger btn-sm">Remove</button>
         `;
+        itemsDiv.appendChild(div);
     });
 
-    document.getElementById("totalCost").innerText = total;
+    totalSpan.innerText = cart.total;
+    updateCartCount();
 }
 
-// Remove an item from cart
+// Remove item
 function removeItem(index) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.splice(index, 1);
+    let cart = JSON.parse(localStorage.getItem('cart')) || { items: [], total: 0 };
+    cart.total -= cart.items[index].price;
+    cart.items.splice(index, 1);
     localStorage.setItem("cart", JSON.stringify(cart));
-    displayCart();
+    loadCartPage();
+}
+
+// Run when page loads
+window.onload = function () {
     updateCartCount();
+    loadCartPage();
 }
