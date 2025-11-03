@@ -4,28 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart sksshophub</title>
+    <title>Cart - sksshophub</title>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" href="Mystyles1.css">
     <script src="script1.js" defer></script>
 </head>
 
 <body style="background-color:rgb(175, 242, 242);">
+
     <center>
-        <h1 style="font-family:Georgia, 'Times New Roman', Times, serif;"><img border="3" class="logo" src="shoplandlogo3.jpg" width="50" height="50">SHOP HUB</h1>
+        <h1 style="font-family:Georgia, 'Times New Roman', Times, serif;">
+            <img border="3" class="logo" src="shoplandlogo3.jpg" width="50" height="50">
+            SHOP HUB
+        </h1>
     </center>
+
+    <!-- ✅ SAME NAVBAR AS OTHER PAGES -->
     <nav>
         <ul style="text-align: left;">
-            <li><a href="Home.html"><i class="fa fa-house"></i>Home</a></li>
+            <li><a href="Home.html">Home</a></li>
             <li><a href="About Us.html">About Us</a></li>
             <li><a href="Contact Us.html">Contact Us</a></li>
         </ul>
+
         <ul style="text-align: right;">
             <li><a href="Registration.html">Registration</a></li>
             <li><a href="Sign In.html">Sign In</a></li>
-            <li><a href="cart.html">Cart (<span id="cartCount">0</span>)</a></li>
+            <li><a href="cart.html">Cart (<span id="cart-count">0</span>)</a></li>
         </ul>
     </nav>
 
@@ -37,80 +46,72 @@
         <h2>Items in Your Cart</h2>
         <div id="cart-items" class="row"></div>
         <h3>Total Cost: <span id="cart-total">0</span> Rupees</h3>
-    </div><br><br><br>
-    
-       <center>
-          <img src="shopland2.jpg" class="carthero-image" alt="Cart Banner">
-       </center>
+    </div>
 
-    
-    
-    <br><br><br><br><br><br><br><br><br><br><br><br>
+    <center>
+        <img src="shopland2.jpg" class="carthero-image" alt="Cart Banner">
+    </center>
 
     <footer>
-        <p>@copy;www.sksshophub.com All Rights Are Reserved...</p>
+        <p>@copy; www.sksshophub.com All Rights Reserved...</p>
     </footer>
-
     <script>
-  function loadCart() {
+    // Load cart count on all pages
+function updateCartCount() {
     let cart = JSON.parse(localStorage.getItem('cart')) || { items: [], total: 0 };
-    const cartCount = document.getElementById('cart-count');
-    const cartTotal = document.getElementById('cart-total');
-    const cartItemsDiv = document.getElementById('cart-items');
+    const countSpan = document.getElementById("cart-count");
+    if (countSpan) countSpan.innerText = cart.items.length;
+}
 
-    // Clear any old content
-    cartItemsDiv.innerHTML = '';
+// Load items on cart page
+function loadCartPage() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || { items: [], total: 0 };
+
+    const itemsDiv = document.getElementById("cart-items");
+    const totalSpan = document.getElementById("cart-total");
+
+    if (!itemsDiv || !totalSpan) return; // Not cart page
+
+    itemsDiv.innerHTML = "";
 
     if (cart.items.length === 0) {
-      cartItemsDiv.innerHTML = "<p>Your cart is empty.</p>";
-      cartCount.innerText = 0;
-      cartTotal.innerText = 0;
-      return;
+        itemsDiv.innerHTML = "<p>Your cart is empty.</p>";
+        totalSpan.innerText = "0";
+        updateCartCount();
+        return;
     }
 
-    // Display items
     cart.items.forEach((item, index) => {
-      const itemDiv = document.createElement('div');
-      itemDiv.className = 'col-md-4';
-      itemDiv.innerHTML = `
-        <h4>${item.name}</h4>
-        <p>Price: ${item.price} Rupees</p>
-        <button onclick="removeItem(${index})" style="background-color:red;color:white;border:none;padding:5px 10px;border-radius:5px;">Remove</button>
-      `;
-      cartItemsDiv.appendChild(itemDiv);
+        const div = document.createElement("div");
+        div.className = "col-md-4";
+        div.innerHTML = `
+            <h4>${item.name}</h4>
+            <p>Price: ${item.price} Rupees</p>
+            <button onclick="removeItem(${index})" class="btn btn-danger btn-sm">Remove</button>
+        `;
+        itemsDiv.appendChild(div);
     });
 
-    // Update totals
-    cartCount.innerText = cart.items.length;
-    cartTotal.innerText = cart.total;
-  }
+    totalSpan.innerText = cart.total;
+    updateCartCount();
+}
 
-  function removeItem(index) {
+// Remove item
+function removeItem(index) {
     let cart = JSON.parse(localStorage.getItem('cart')) || { items: [], total: 0 };
-    if (index >= 0 && index < cart.items.length) {
-      cart.total -= cart.items[index].price;
-      cart.items.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      loadCart(); // reload cart
-    }
-  }
+    cart.total -= cart.items[index].price;
+    cart.items.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    loadCartPage();
+}
 
-  window.onload = loadCart;
+// Run when page loads
+window.onload = function () {
+    updateCartCount();
+    loadCartPage();
+}
 </script>
 
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
