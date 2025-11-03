@@ -4,33 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart - sksshophub</title>
-
+    <title>Cart sksshophub</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
     <link rel="stylesheet" href="Mystyles1.css">
-    <script src="script1.js" defer></script>
 </head>
 
 <body style="background-color:rgb(175, 242, 242);">
-
     <center>
-        <h1 style="font-family:Georgia, 'Times New Roman', Times, serif;">
-            <img border="3" class="logo" src="shoplandlogo3.jpg" width="50" height="50">
-            SHOP HUB
-        </h1>
+        <h1 style="font-family:Georgia, 'Times New Roman', Times, serif;"><img border="3" class="logo" src="shoplandlogo3.jpg" width="50" height="50">SHOP HUB</h1>
     </center>
-
-    <!-- ✅ SAME NAVBAR AS OTHER PAGES -->
     <nav>
         <ul style="text-align: left;">
-            <li><a href="Home.html">Home</a></li>
+            <li><a href="Home.html"><i class="fa fa-house"></i>Home</a></li>
             <li><a href="About Us.html">About Us</a></li>
             <li><a href="Contact Us.html">Contact Us</a></li>
         </ul>
-
         <ul style="text-align: right;">
             <li><a href="Registration.html">Registration</a></li>
             <li><a href="Sign In.html">Sign In</a></li>
@@ -46,17 +36,21 @@
         <h2>Items in Your Cart</h2>
         <div id="cart-items" class="row"></div>
         <h3>Total Cost: <span id="cart-total">0</span> Rupees</h3>
-    </div>
+    </div><br><br><br>
+    
+       <center>
+          <img src="shopland2.jpg" class="carthero-image" alt="Cart Banner">
+       </center>
 
-    <center>
-        <img src="shopland2.jpg" class="carthero-image" alt="Cart Banner">
-    </center>
+    
+    
+    <br><br><br><br><br><br><br><br><br><br><br><br>
 
     <footer>
-        <p>@copy; www.sksshophub.com All Rights Reserved...</p>
+        <p>@copy;www.sksshophub.com All Rights Are Reserved...</p>
     </footer>
-    <script>
-    // Load cart count on all pages
+
+    <script>// Load cart count on all pages
 function updateCartCount() {
     let cart = JSON.parse(localStorage.getItem('cart')) || { items: [], total: 0 };
     const countSpan = document.getElementById("cart-count");
@@ -115,3 +109,12 @@ window.onload = function () {
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
